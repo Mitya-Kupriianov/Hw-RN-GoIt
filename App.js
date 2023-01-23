@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Provider } from "react-redux";
+
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 
-import LoginScreen from "./src/Screens/page/LoginScreen";
-// import RegistrationScreen from "./src/Screens/page/RegistrationScreen/RegistrationScreen";
+import { store } from "./src/redux/store";
+
+import Home from "./src/Screens/page/Home";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -15,8 +18,8 @@ export default function App() {
     async function prepare() {
       try {
         await Font.loadAsync({
-          "Roboto-Regular": require("./src/Screens/assets/fonts/Roboto/Roboto-Regular.ttf"),
-          "Roboto-Medium": require("./src/Screens/assets/fonts/Roboto/Roboto-Medium.ttf"),
+          "Roboto-Regular": require("./src/assets/fonts/Roboto/Roboto-Regular.ttf"),
+          "Roboto-Medium": require("./src/assets/fonts/Roboto/Roboto-Medium.ttf"),
         });
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (e) {
@@ -39,10 +42,11 @@ export default function App() {
     return null;
   }
   return (
-    <View style={s.container} onLayout={onLayoutRootView}>
-      <LoginScreen />
-      {/* <RegistrationScreen /> */}
-    </View>
+    <Provider store={store}>
+      <View style={s.container} onLayout={onLayoutRootView}>
+        <Home />
+      </View>
+    </Provider>
   );
 }
 
@@ -50,6 +54,5 @@ const s = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "center",
   },
 });

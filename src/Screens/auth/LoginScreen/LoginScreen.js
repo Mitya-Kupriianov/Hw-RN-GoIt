@@ -1,4 +1,8 @@
 import React, { useState, createRef } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../../../redux/auth/authSlice";
+
+import StyledTextInput from "../../../common/form/StyledTextInput";
 
 import {
   StyleSheet,
@@ -18,12 +22,19 @@ const initialState = {
   password: "",
 };
 
-function LoginScreen() {
+function LoginScreen({ navigation }) {
   const [state, setState] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const dispatch = useDispatch();
 
   const ref_input2 = createRef();
-  const ref_input3 = createRef();
+
+  const switchToNextRef = (ref) => {
+    ref.current.focus();
+  };
+  const switchingStyled = () => {
+    setIsShowKeyboard(true);
+  };
 
   const keyboardHide = () => {
     Keyboard.dismiss();
@@ -33,6 +44,7 @@ function LoginScreen() {
   const submitForm = () => {
     keyboardHide();
     setState(initialState);
+    dispatch(login());
     console.log(state);
   };
   return (
@@ -48,38 +60,35 @@ function LoginScreen() {
         >
           <ImageBackground
             style={s.image}
-            source={require("../../assets/imeges/PhotoBG.jpeg")}
+            source={require("../../../assets/imeges/PhotoBG.jpeg")}
           >
             <View style={s.wrap}>
               <View>
                 <Text style={s.title}>Войти</Text>
 
                 <View style={{ marginBottom: 16 }}>
-                  <TextInput
-                    style={s.input}
-                    placeholder="Адрес электронной почты"
-                    selectionColor="#FF6C00"
-                    onFocus={() => setIsShowKeyboard(true)}
+                  <StyledTextInput
+                    placeholder={"Адрес электронной почты"}
+                    onFocus={() => switchingStyled()}
                     onChangeText={(value) =>
                       setState((prev) => ({ ...prev, email: value }))
                     }
-                    onSubmitEditing={() => ref_input3.current.focus()}
                     value={state.email}
+                    onSubmitEditing={() => switchToNextRef(ref_input2)}
+                    blurOnSubmit={false}
                   />
                 </View>
 
-                <TextInput
-                  style={s.input}
-                  placeholder="Пароль"
-                  selectionColor="#FF6C00"
-                  secureTextEntry={true}
-                  onFocus={() => setIsShowKeyboard(true)}
+                <StyledTextInput
+                  password
+                  placeholder={"Пароль"}
+                  onFocus={() => switchingStyled()}
                   onChangeText={(value) =>
                     setState((prev) => ({ ...prev, password: value }))
                   }
                   value={state.password}
-                  ref={ref_input3}
                   onSubmitEditing={() => submitForm()}
+                  ref={ref_input2}
                 />
                 <TouchableOpacity
                   style={{
@@ -93,8 +102,14 @@ function LoginScreen() {
                 >
                   <Text style={s.btnText}>Войти</Text>
                 </TouchableOpacity>
-
-                <Text style={s.linkText}>Нет аккаунта? Зарегистрироваться</Text>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate("Registration")}
+                >
+                  <Text style={s.linkText}>
+                    Нет аккаунта? Зарегистрироваться
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </ImageBackground>

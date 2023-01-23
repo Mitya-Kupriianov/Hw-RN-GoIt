@@ -5,7 +5,6 @@ import {
   Text,
   View,
   ImageBackground,
-  TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
@@ -14,7 +13,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import StyledTextInput from "../../common/form/StyledTextInput";
+import StyledTextInput from "../../../common/form/StyledTextInput";
 
 const initialState = {
   user: "",
@@ -24,11 +23,10 @@ const initialState = {
 
 const windowDimensions = Dimensions.get("window").width / 2 - 60;
 
-function RegistrationScreen() {
+function RegistrationScreen({ navigation }) {
   const [state, setState] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
-  const ref_input1 = createRef();
   const ref_input2 = createRef();
   const ref_input3 = createRef();
 
@@ -36,8 +34,8 @@ function RegistrationScreen() {
     setIsShowKeyboard(true);
   };
 
-  const qwerty = () => {
-    ref_input2.current.focus();
+  const switchToNextRef = (ref) => {
+    ref.current.focus();
   };
   const keyboardHide = () => {
     Keyboard.dismiss();
@@ -62,18 +60,18 @@ function RegistrationScreen() {
         >
           <ImageBackground
             style={s.image}
-            source={require("../../assets/imeges/PhotoBG.jpeg")}
+            source={require("../../../assets/imeges/PhotoBG.jpeg")}
           >
             <View style={s.wrap}>
               <View style={s.userWrap}>
                 <Image
                   style={s.imegeUser}
-                  source={require("../../assets/imeges/mountain.jpg")}
+                  source={require("../../../assets/imeges/mountain.jpg")}
                 />
                 <TouchableOpacity style={s.btnUser}>
                   <Image
                     style={s.btnUserImg}
-                    source={require("../../assets/imeges/Plus.jpeg")}
+                    source={require("../../../assets/imeges/Plus.jpeg")}
                   />
                 </TouchableOpacity>
               </View>
@@ -88,7 +86,7 @@ function RegistrationScreen() {
                       setState((prev) => ({ ...prev, user: value }))
                     }
                     value={state.user}
-                    onSubmitEditing={() => qwerty()}
+                    onSubmitEditing={() => switchToNextRef(ref_input2)}
                     blurOnSubmit={false}
                   />
                 </View>
@@ -100,14 +98,14 @@ function RegistrationScreen() {
                       setState((prev) => ({ ...prev, email: value }))
                     }
                     value={state.email}
-                    // onSubmitEditing={ref_input3}
+                    onSubmitEditing={() => switchToNextRef(ref_input3)}
                     ref={ref_input2}
                     blurOnSubmit={false}
                   />
                 </View>
                 <StyledTextInput
+                  password
                   placeholder={"Пароль"}
-                  secureTextEntry={true}
                   onFocus={() => switchingStyled()}
                   onChangeText={(value) =>
                     setState((prev) => ({ ...prev, password: value }))
@@ -128,8 +126,12 @@ function RegistrationScreen() {
                 >
                   <Text style={s.btnText}>Зарегистрироваться</Text>
                 </TouchableOpacity>
-
-                <Text style={s.linkText}>Уже есть аккаунт? Войти</Text>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate("Login")}
+                >
+                  <Text style={s.linkText}>Уже есть аккаунт? Войти</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </ImageBackground>
