@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isAuth: false,
+  isTabBar: false,
 };
 
 const authSlice = createSlice({
@@ -14,9 +15,15 @@ const authSlice = createSlice({
     logout(state) {
       state.isAuth = false;
     },
+    tabBarOn(state) {
+      state.isTabBar = true;
+    },
+    tabBarOf(state) {
+      state.isTabBar = false;
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, tabBarOn, tabBarOf } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

@@ -12,12 +12,12 @@ import RegistrationScreen from "../Screens/auth/RegistrationScreen";
 import PostsScreen from "../Screens/page/PostsScreen";
 import CreatePostsScreen from "../Screens/page/CreatePostsScreen";
 import ProfileScreen from "../Screens/page/ProfileScreen";
-import { logout } from "../redux/auth/authSlice";
+import { logout, tabBarOn } from "../redux/auth/authSlice";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const useRoute = (isAuth) => {
+const useRoute = (isAuth, isTabBar) => {
   const dispatch = useDispatch();
   if (!isAuth) {
     return (
@@ -47,12 +47,12 @@ const useRoute = (isAuth) => {
         tabBarInactiveTintColor: "#FF6C00",
         tabBarStyle: {
           paddingHorizontal: 82,
+          display: isTabBar ? "none" : "flex",
         },
       }}
     >
       <Tab.Screen
         options={{
-          //   headerShown: false,
           tabBarIcon: ({ focused, size, color }) => (
             <View
               style={{
@@ -85,8 +85,12 @@ const useRoute = (isAuth) => {
       />
       <Tab.Screen
         options={{
+          headerShown: isTabBar ? false : true,
           tabBarIcon: ({ focused, size, color }) => (
             <View
+              onPress={() => {
+                dispatch(tabBarOn());
+              }}
               style={{
                 ...s.container,
                 backgroundColor: focused ? "#FF6C00" : "#fff",

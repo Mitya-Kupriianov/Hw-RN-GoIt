@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 
-import { StyleSheet, TextInput, View, Text } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import { EvilIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 const StyledTextInput = React.forwardRef(
   (
@@ -12,6 +20,7 @@ const StyledTextInput = React.forwardRef(
       onChangeText,
       blurOnSubmit,
       password,
+      location,
     },
     ref,
   ) => {
@@ -34,8 +43,13 @@ const StyledTextInput = React.forwardRef(
         }}
       >
         <View style={s.boxImput}>
+          {location && <EvilIcons name="location" size={24} color="#BDBDBD" />}
           <TextInput
-            style={{ ...s.input, width: password ? "80%" : "100%" }}
+            style={{
+              ...s.input,
+              width: password ? "80%" : "100%",
+              // width: location ? "93%" : "100%",
+            }}
             placeholder={placeholder}
             selectionColor="#FF6C00"
             onFocus={() => switchingStyled()}
@@ -48,9 +62,12 @@ const StyledTextInput = React.forwardRef(
             secureTextEntry={password ? isPassword : false}
           />
           {password && (
-            <Text onPress={() => switchPassword()}>
-              {isPassword ? "Показать" : "Скрыть"}
-            </Text>
+            <Ionicons
+              name={isPassword ? "ios-eye-outline" : "ios-eye-off-outline"}
+              size={24}
+              color="black"
+              onPress={() => switchPassword()}
+            />
           )}
         </View>
       </View>

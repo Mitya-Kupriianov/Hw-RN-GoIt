@@ -1,14 +1,17 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
-import { selectIsAuth } from "../../../redux/auth/authSelectors";
+import {
+  selectIsAuth,
+  selectIsTabBar,
+} from "../../../redux/auth/authSelectors";
 import { View, Text, StyleSheet } from "react-native";
 import useRoute from "../../../Routes/Routes";
 
 const Home = () => {
   const isAuth = useSelector(selectIsAuth);
-  // console.log(isAuth);
-  const routing = useRoute(isAuth);
+  const isTabBar = useSelector(selectIsTabBar);
+  const routing = useRoute(isAuth, isTabBar);
   return <NavigationContainer>{routing}</NavigationContainer>;
 };
 
